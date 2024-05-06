@@ -12,7 +12,7 @@
     Edit user
   </dt>
   <dd>
-    <form action="/update_user/109" method="post">
+    <form action="/update_user/<%= @the_user.username %>"method="post">
       <label for="browser_username">Username</label>
       <input id="browser_username" type="text" name="input_username" value=augustine>
 
@@ -21,7 +21,7 @@
   </dd>
 </dl>
 
-<h2>Own photos (<%= @the_user.own_photos.size %></h2>
+<h2>Own photos (<%= @the_user.own_photos.size %>) </h2>
 
 <table border="1">
   <tr>
@@ -46,27 +46,12 @@
   </tr>
 
   <% @the_user.own_photos.each do |a_photo| %>
-  <tr>
-    <td>
-      <img src="<%= a_photo.image %>">
-    </td>
-
-    <td>
-      <%= User.where({ :id => a_photo.owner_id }).at(0).username %>
-      <%= a_photo.poster.username %>
-    </td>
-
-    <td>
-      <%= a_photo.caption %>
-    </td>
-
-    <td>
-      <%= a_photo.created_at %>
-    </td>
-
-    <td>
-      Show details
-    </td>
-  </tr>
+    <tr>
+      <td><img src="<%= a_photo.image %>"></td>
+      <td><%= User.where({ :id => a_photo.owner_id }).at(0).username %></td>
+      <td><%= a_photo.caption %></td>
+      <td><%= a_photo.created_at %></td>
+      <td>Show details</td>
+    </tr>
   <% end %>
 </table>
