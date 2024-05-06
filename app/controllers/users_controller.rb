@@ -38,8 +38,8 @@ class UsersController < ApplicationController
     end
 
     # Update the username from the form input
-    input_username = params.fetch("input_username")
-    the_user.username = input_username
+    new_username = params.fetch("input_username")
+    the_user.username = new_username
 
     # Save changes and always redirect to the new URL
     if the_user.save

@@ -12,9 +12,9 @@
     Edit user
   </dt>
   <dd>
-    <form action="/update_user/<%= @the_user.username %>"method="post">
+    <form action="<%= update_user_path(@the_user.username) %>" method="post">
       <label for="browser_username">Username</label>
-      <input id="browser_username" type="text" name="input_username" value=augustine>
+      <input id="browser_username" type="text" name="input_username" value="<%= @the_user.username %>">
 
       <button>Update user</button>
     </form>
@@ -51,7 +51,10 @@
       <td><%= User.where({ :id => a_photo.owner_id }).at(0).username %></td>
       <td><%= a_photo.caption %></td>
       <td><%= a_photo.created_at %></td>
-      <td>Show details</td>
+      <td>
+        <a href="/photos/<%= a_photo.id %>">Show details</a>
+      </td>
     </tr>
+
   <% end %>
 </table>

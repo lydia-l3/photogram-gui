@@ -14,6 +14,8 @@ class PhotosController < ApplicationController
 
     @the_photo = matching_photos.at(0)
 
+    @new_comment = Comment.new
+
     render({ :template => "photo_templates/show" })
   end
 
@@ -31,18 +33,21 @@ class PhotosController < ApplicationController
   end
 
   def create
-    input_image = params.fetch("query_image")
-    input_caption = params.fetch("query_caption")
-    input_owner_id = params.fetch("query_owner_id")
+    new_photo = Photo.new(
+      image: params[:input_image],
+      caption: params[:input_caption],
+      owner_id: params[:input_owner_id]
+    )
 
-    a_new_photo = Photo.new
-    a_new_photo.image = input_image
-    a_new_photo.caption = input_caption
-    a_new_photo.owner_id = input_owner_id
+    unless new_photo.valid?
+      Rails.logger.debug "Photo validation errors: #{new_photo.errors.full_messages.join(", ")}"
+    end
 
-    a_new_photo.save
-    #render({ :template => "photo_templates/create"})
-    redirect_to("photos/" + a_new_photo.id.to_s)
+    if new_photo.save
+      redirect_to "/photos/#{new_photo.id}", notice: "Photo created successfully."
+    else
+      redirect_to "/photos", alert: "Error creating photo."
+    end
   end
 
   def update
@@ -59,6 +64,20 @@ class PhotosController < ApplicationController
     the_photo.save
 
     #render({ :template => "photo_templates/update" })
-    redirect_to("photos/" + a_new_photo.id.to_s)
+    redirect_to "/photos/#{the_photo.id}", notice: "Photo created successfully."
+  end
+
+  def add_comment
+    photo_id = params.fetch("photo_id")
+    new_comment = Comment.new
+    new_comment.photo_id = photo_id
+    new_comment.author_id = params.fetch("input_author_id")
+    new_comment.body = params.fetch("input_comment")
+
+    if new_comment.save
+      redirect_to "/photos/#{photo_id}", notice: "Comment added successfully."
+    else
+      redirect_to "/photos/#{photo_id}", alert: "Error adding comment."
+    end
   end
 end
