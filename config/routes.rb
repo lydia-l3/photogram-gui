@@ -20,5 +20,5 @@ Rails.application.routes.draw do
 
   post("/update_photo/:modify_id", { :controller => "photos", :action => "update" })
 
-  post "/add_comment/:photo_id", to: "photos#add_comment", as: "add_comment"
+  post "/add_comment", to: "photos#add_comment", as: "add_comment"
 end
